@@ -4,27 +4,12 @@ input:
   chunk_size: 50000
 
 columns:
-  keep:
-    - "ID"
-    - "Nombre de la Unidad Económica"
-    - "Razón social"
-    - "Código de la clase de actividad SCIAN"
-    - "Nombre de clase de la actividad"
-    - "Entidad federativa"
-    - "Municipio"
-    - "Localidad"
-    - "Número de teléfono"
-    - "Correo electrónico"
-    - "Sitio en Internet"
-    - "Latitud"
-    - "Longitud"
-    - "Descripcion estrato personal ocupado"  
-
-  rename:
-    "Nombre de la Unidad Económica": "nombre_comercial" 
+  mapping:
+    "ID": "id"
+    "Nombre de la Unidad Económica": "nombre_comercial"
     "Razón social": "razon_social"
     "Código de la clase de actividad SCIAN": "codigo_actividad"
-    "Nombre de la clase data la actividad": "nombre_actividad"
+    "Nombre de clase de la actividad": "nombre_actividad"
     "Entidad federativa": "entidad"
     "Municipio": "municipio"
     "Localidad": "localidad"
@@ -35,8 +20,8 @@ columns:
 
 cleaning:
   drop_duplicates: true
-  subset_duplicates: ["ID"]
-  min_contact_required: true
+  subset_duplicates: ["id"]
+  require_contact: "both"
   fillna:
     telefono: ""
     email: ""
@@ -45,6 +30,4 @@ cleaning:
 
 filters:
   codigos_actividad: []
-  nombres_actividad: []
   entidades: []
-  municipio: []
