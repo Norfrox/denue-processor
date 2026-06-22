@@ -1,0 +1,50 @@
+input:
+  file_path: "data/FILE.csv"
+  encoding: "latin-1"
+  chunk_size: 50000
+
+columns:
+  keep:
+    - "ID"
+    - "Nombre de la Unidad Económica"
+    - "Razón social"
+    - "Código de la clase de actividad SCIAN"
+    - "Nombre de clase de la actividad"
+    - "Entidad federativa"
+    - "Municipio"
+    - "Localidad"
+    - "Número de teléfono"
+    - "Correo electrónico"
+    - "Sitio en Internet"
+    - "Latitud"
+    - "Longitud"
+    - "Descripcion estrato personal ocupado"  
+
+  rename:
+    "Nombre de la Unidad Económica": "nombre_comercial" 
+    "Razón social": "razon_social"
+    "Código de la clase de actividad SCIAN": "codigo_actividad"
+    "Nombre de la clase data la actividad": "nombre_actividad"
+    "Entidad federativa": "entidad"
+    "Municipio": "municipio"
+    "Localidad": "localidad"
+    "Número de teléfono": "telefono"
+    "Correo electrónico": "email"
+    "Sitio en Internet": "sitio_web"
+    "Descripcion estrato personal ocupado": "estrato_personal"
+
+cleaning:
+  drop_duplicates: true
+  subset_duplicates: ["ID"]
+  min_contact_required: true
+  fillna:
+    telefono: ""
+    email: ""
+    sitio_web: ""
+    estrato_personal: "NO ESPECIFICADO"
+
+filters:
+  codigos_actividad: []
+  nombres_actividad: []
+  entidades: []
+  municipio: []
