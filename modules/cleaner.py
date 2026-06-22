@@ -19,9 +19,9 @@ class DenueCleaner:
         df.rename(columns=self.config.column_mapping, inplace=True)
         
         for col in df.select_dtypes(include=['object']).columns:
-            df[col] = df[col].astype(str).str.strip().str.upper
+            df[col] = df[col].astype(str).str.strip().str.upper()
 
-            df[col] = df[col].replace(['NAN', 'NONE', NULL, ''], pd.NA)
+            df[col] = df[col].replace(['NAN', 'NONE', 'NULL', ''], pd.NA)
 
         before_contact = len(df)
 
@@ -33,8 +33,8 @@ class DenueCleaner:
             df = df[mask]
         elif self.config.require_contact == "both":
             mask = (
-                df['telefono'].notna &
-                df['email'].notna
+                df['telefono'].notna() &
+                df['email'].notna()
             )
             df = df[mask]
         else:
@@ -49,7 +49,7 @@ class DenueCleaner:
                 df[col] = df[col].fillna(fill_value)
 
         if self.config.drop_duplicates and self.config.subset_duplicates:
-            valid_subsets = [col for col in self.config.subset_duplicates if col in df.colums]
+            valid_subsets = [col for col in self.config.subset_duplicates if col in df.columns]
             if valid_subsets:
                 df.drop_duplicates(
                     subset=valid_subsets,
