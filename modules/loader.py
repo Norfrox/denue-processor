@@ -3,7 +3,7 @@ from typing import Iterator
 from .config import DenueConfig
 import logging
 
-logger = loggin.getLogget(__name__)
+logger = logging.getLogger(__name__)
 
 class DenueDataLoader:
 
@@ -17,7 +17,7 @@ class DenueDataLoader:
                 self.config.input_file,
                 encoding=self.config.encoding,
                 chunksize=self.config.chunk_size,
-                load_memory=False
+                low_memory=False
             )
             for chunk in chunks:
                 yield chunk
