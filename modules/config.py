@@ -14,7 +14,7 @@
 
 import yaml
 from dataclasses import dataclass
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 
 @dataclass
 class DenueConfig:
@@ -27,6 +27,7 @@ class DenueConfig:
     require_contact: str
     fillna: Dict[str, str]
     filters: Dict
+    website_verification: Dict[str, Any]
 
     @classmethod
     def from_yaml(cls, path: str):
@@ -41,5 +42,6 @@ class DenueConfig:
             subset_duplicates=data['cleaning']['subset_duplicates'],
             require_contact=data['cleaning']['require_contact'],
             fillna=data['cleaning']['fillna'],
-            filters=data['filters']
+            filters=data['filters'],
+            website_verification=data.get('website_verification', {})
         )

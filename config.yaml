@@ -1,5 +1,5 @@
 input:
-  file_path: "data/FILE.csv"
+  file_path: "data/INEGI_DENUE_14062026.csv"
   encoding: "latin-1"
   chunk_size: 50000
 
@@ -31,3 +31,11 @@ cleaning:
 filters:
   codigos_actividad: []
   entidades: []
+
+website_verification:
+  enabled: true
+  timeout: 5
+  max_retries: 1
+  user_agent: "Mozilla/5.0 (compatible; NorfroxBot/1.0; +https://norfrox.com/scout)"
+  verify_ssl: false
+  allowed_status_codes: [200, 301, 302]
