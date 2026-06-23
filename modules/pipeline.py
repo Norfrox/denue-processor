@@ -15,6 +15,7 @@
 from .loader import DenueDataLoader
 from .cleaner import DenueCleaner
 from .analyzer import ClientFinder
+from .verifier import WebsiteVerifier
 from .config import DenueConfig
 import pandas as pd
 import logging
@@ -28,6 +29,7 @@ class DenuePipeline:
         self.loader = DenueDataLoader(config)
         self.cleaner = DenueCleaner(config)
         self.finder = ClientFinder(config)
+        self.verifier = WebsiteVerifier(config.website_verification)
 
     def run(self, output_path: str = None) -> pd.DataFrame:
         all_clients = []
@@ -37,14 +39,22 @@ class DenuePipeline:
             chunk_clean = self.cleaner.clean(chunk)
             if chunk_clean.empty:
                 continue
-            clients = self.finder.find_potential_clients(chunk_clean)
+            
+            chunk_verified = self.verifier.verify_dataframe(chunk_clean)
+
+            clients = self.finder.find_potential_clients(chunk_verified)
             if not clients.empty:
                 all_clients.append(clients)
 
         if all_clients:
+
             final_df = pd.concat(all_clients, ignore_index=True)
-            final_df.drop_duplicates(subset=['id', 'razon_social'], inplace=True)
+
+            if 'id' in final_df.columns:
+                final_df.drop_duplicates(subset=['id'], inplace=True)
+
             logger.info(f"Total Clients Found: {len(final_df)}")
+
             if output_path:
                 final_df.to_csv(output_path, index=False, encoding='utf-8-sig')
                 logger.info(f"Results saved in: {output_path}")

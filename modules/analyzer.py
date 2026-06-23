@@ -23,7 +23,7 @@ class ClientFinder():
         self.config = config
 
     def find_potential_clients(self, df: pd.DataFrame) -> pd.DataFrame:
-        logger.info("Aplicando filtros (sector económico y ubicación)...")
+        logger.info("Aplying Filters (sector económico y ubicación)...")
         filtered = df.copy()
 
         if 'codigo_actividad' in filtered.columns:
