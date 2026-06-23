@@ -28,7 +28,7 @@ El script permite:
 
 2. Instala las dependencias
    
-  ```pip install pasdas pyyaml```
+  ```pip install pandas pyyaml requests```
 
 4. Coloca tu archivo DENUE
 
