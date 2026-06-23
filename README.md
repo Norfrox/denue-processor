@@ -6,7 +6,7 @@ Empresa: Norfrox
 Licencia: Apache License 2.0
 
 ## Descripcion
-Esta herramienta procesa el archivo del DENUE (Directorio Estadistico Nacional de Unidades Económicas) del INEGI para extraer de manera rápida  y limpia una lista de clientes para tu negocio.
+Desarrollada para uso de Norfrox, esta herramienta automatiza el procesamiento de datos del DENUE (INEGI), facilitando la extracción y análisis de información comercial para actividades de inteligencia de mercado y prospección.
 
 El script permite:
 
