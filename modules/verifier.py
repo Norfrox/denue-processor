@@ -44,7 +44,7 @@ class WebsiteVerifier:
             url = 'http://' + url
         return url
 
-    def _check_url(self, url: str) -> Dict(str, Any):
+    def _check_url(self, url: str) -> Dict[str, Any]:
         result = {
             'url': url,
             'activo': False,
@@ -52,12 +52,15 @@ class WebsiteVerifier:
             'error': None
         }
 
-        if not url or pd.isna(url) or url.strip() == '':
+        if not url or pd.isna(url) or str(url).strip() == '':
             result['error'] = 'URL vacia'
             return result
 
+        url = str(url).strip()
+
         url_normalized = self._normalize_url(url)
         parsed = urlparse(url_normalized)
+
         if not parsed.netloc:
             result['error'] = 'URL inválida'
             return result
@@ -65,21 +68,13 @@ class WebsiteVerifier:
         session = self._get_session()
         for attempt in range(self.max_retries + 1):
             try:
-                try:
-                    response = session.head(
-                        url_normalized,
-                        timeout=self.timeout,
-                        verify=self.verify_ssl,
-                        allow_redirects=True
-                    )
-                except requests.exceptions.MethodNotAllowed:
-                    response = session.get(
-                        url_normalized,
-                        timeout=self.timeout,
-                        verify=self.verify_ssl,
-                        allow_redirects=True,
-                        stream=True
-                    )
+                response = session.get(
+                    url_normalized,
+                    timeout=self.timeout,
+                    verify=self.verify_ssl,
+                    allow_redirects=True,
+                    stream=True
+                )
 
                 response.close()
 
@@ -108,10 +103,16 @@ class WebsiteVerifier:
     def verify_dataframe(self, df: pd.DataFrame, url_column: str = 'sitio_web') -> pd.DataFrame:
         if not self.enabled:
             logger.info("Web site verification disabled.")
+            df['sitio_web_activo'] = False
+            df['sitio_web_status'] = None
+            df['sitio_web_error'] = None
             return df
 
         if url_column not in df.columns:
             logger.warning(f"Column '{url_column}' not found. Skiping verification.")
+            df['sitio_web_activo'] = False
+            df['sitio_web_status'] = None
+            df['sitio_web_error'] = None            
             return df
 
         df['sitio_web_activo'] = False
@@ -133,7 +134,7 @@ class WebsiteVerifier:
             for future in as_completed(future_to_url):
                 url = future_to_url[future]
                 try:
-                    results = future.result()
+                    result = future.result()
                     results[url] = result
                 except Exception as e:
                     logger.error(f"Error inesperado verificando {url}: {e}")
@@ -150,8 +151,8 @@ class WebsiteVerifier:
                 df.at[idx, 'sitio_web_error'] = result['error']
 
         activos = df['sitio_web_activo'].sum()
-        total = len(df[url_column].notna() & (df[url_column] != '') & (df[url_column] != 'SIN_WEB'))
+        total = mask_valid.sum()
 
-        logger.info(f"Verification completed. Active sites: {actives}/{total}")
+        logger.info(f"Verification completed. Active sites: {activos}/{total}")
 
         return df
