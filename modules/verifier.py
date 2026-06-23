@@ -14,11 +14,13 @@
 
 import requests
 import logging
+import urllib3
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
 from typing import Dict, Any
 from urllib.parse import urlparse
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 logger = logging.getLogger(__name__)
 
 class WebsiteVerifier:
